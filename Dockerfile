@@ -1,6 +1,6 @@
 FROM php:5.6-fpm
 
-MAINTAINER Jaroslav Hranicka <hranicka@outlook.com>
+MAINTAINER Jan Forgac <forgac@artweby.cz>
 
 ENV DEBIAN_FRONTEND noninteractive
 
