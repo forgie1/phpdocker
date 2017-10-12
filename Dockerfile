@@ -1,8 +1,9 @@
 FROM php:5.4-fpm
 
-MAINTAINER Jaroslav Hranicka <hranicka@outlook.com>
+MAINTAINER Jan Forgac <forgac@artweby.cz>
 
 ENV DEBIAN_FRONTEND noninteractive
+
 COPY bin/* /usr/local/bin/
 RUN chmod -R 700 /usr/local/bin/
 
