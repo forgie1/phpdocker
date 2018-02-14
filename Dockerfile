@@ -1,4 +1,4 @@
-FROM php:7.0.12-fpm
+FROM php:7.2.1-fpm
 
 MAINTAINER Jan Forgac <forgac@artweby.cz>
 
@@ -138,14 +138,14 @@ RUN cd /tmp \
 	&& phpize \
 	&& ./configure \
 	&& make \
-	&& cp /tmp/php-memcached/modules/memcached.so /usr/local/lib/php/extensions/no-debug-non-zts-20151012/memcached.so \
+	&& cp /tmp/php-memcached/modules/memcached.so /usr/local/lib/php/extensions/no-debug-non-zts-20180214/memcached.so \
 	&& docker-php-ext-enable memcached
 
 # Install XDebug, but not enable by default. Enable using:
 # * php -d$XDEBUG_EXT vendor/bin/phpunit
 # * php_xdebug vendor/bin/phpunit
-RUN pecl install xdebug-2.5.0
-ENV XDEBUG_EXT zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20151012/xdebug.so
+RUN pecl install xdebug-2.6.0
+ENV XDEBUG_EXT zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180214/xdebug.so
 RUN alias php_xdebug="php -d$XDEBUG_EXT vendor/bin/phpunit"
 
 # Install composer and put binary into $PATH
