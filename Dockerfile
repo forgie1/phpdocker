@@ -7,7 +7,6 @@ ENV DEBIAN_FRONTEND noninteractive
 COPY bin/* /usr/local/bin/
 RUN chmod -R 700 /usr/local/bin/
 
-
 # Locales
 RUN apt-get update \
 	&& apt-get install -y locales
@@ -135,6 +134,9 @@ RUN cd /tmp \
 	&& make \
 	&& cp /tmp/php-memcached/modules/memcached.so /usr/local/lib/php/extensions/no-debug-non-zts-20170718/memcached.so \
 	&& docker-php-ext-enable memcached
+
+# The GNU Privacy Guard -- required by Xdebug
+RUN apt-get update && apt-get install -my wget gnupg
 
 # Install XDebug, but not enable by default. Enable using:
 # * php -d$XDEBUG_EXT vendor/bin/phpunit
