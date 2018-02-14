@@ -197,7 +197,7 @@ RUN npm install -g bower
 
 # MariaDB
 RUN apt-get update \
-	&& install -y software-properties-common dirmngr \
+	&& apt-get install -y software-properties-common dirmngr \
 	&& apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8 \
 	&& add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirror.vpsfree.cz/mariadb/repo/10.1/debian stretch main'
 
