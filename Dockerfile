@@ -195,7 +195,7 @@ RUN npm install -g bower
 RUN apt-get update \
 	&& apt-get install -y software-properties-common \
 	&& apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db \
-	&& add-apt-repository 'deb [arch=amd64,i386] http://mirror.vpsfree.cz/mariadb/repo/10.1/debian jessie main'
+	&& add-apt-repository 'deb [arch=amd64,i386] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.1/debian jessie main'
 
 RUN apt-get update \
 	&& apt-get install -y mariadb-server \
