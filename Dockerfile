@@ -7,6 +7,10 @@ ENV DEBIAN_FRONTEND noninteractive
 COPY bin/* /usr/local/bin/
 RUN chmod -R 700 /usr/local/bin/
 
+#print Debian and PHP version
+RUN cat /etc/issue
+RUN php -v
+
 # Locales
 RUN apt-get update \
 	&& apt-get install -y locales
@@ -193,9 +197,9 @@ RUN npm install -g bower
 
 # MariaDB
 RUN apt-get update \
-	&& apt-get install -y software-properties-common \
-	&& apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db \
-	&& add-apt-repository 'deb [arch=amd64,i386] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.1/debian jessie main'
+	&& install software-properties-common dirmngr \
+	&& apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8 \
+	&& add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirror.vpsfree.cz/mariadb/repo/10.1/debian stretch main'
 
 RUN apt-get update \
 	&& apt-get install -y mariadb-server \
