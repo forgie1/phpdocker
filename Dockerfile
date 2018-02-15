@@ -187,7 +187,8 @@ RUN apt-get update \
 	&& add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirror.vpsfree.cz/mariadb/repo/10.2/debian stretch main'
 
 RUN apt-get update \
-	&& apt-get install -y mariadb-server
+	&& apt-get install -y mariadb-server \
+	&& mysql_install_db
 
 VOLUME /var/lib/mysql
 
