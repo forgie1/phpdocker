@@ -31,7 +31,8 @@ ENV LANGUAGE en_US.UTF-8
 RUN apt-get update \
 	&& apt-get install -y \
 		openssl \
-		git
+		git \
+		gnupg2
 
 
 # PHP
@@ -103,6 +104,13 @@ RUN apt-get update \
 	&& apt-get install -y \
 	libssh2-1-dev
 
+# memcached
+RUN apt-get update \
+	&& apt-get install -y \
+	libmemcached-dev \
+	libmemcached11
+
+
 # others
 RUN docker-php-ext-install \
 	soap \
@@ -114,33 +122,10 @@ RUN docker-php-ext-install \
 
 # PECL
 RUN docker-php-pecl-install \
-#	ssh2-1.0 \
-	redis-3.0 \
-	apcu-5.1.7
-
-# SSH2
-# TODO PECL is buggy, we must compile it.
-RUN git clone https://github.com/php/pecl-networking-ssh2.git /usr/src/php/ext/ssh2 \
-	&& docker-php-ext-install ssh2
-
-# Memcached
-# TODO PECL not available for PHP 7 yet, we must compile it.
-RUN apt-get update \
-	&& apt-get install -y \
-	libmemcached-dev \
-	libmemcached11
-
-RUN cd /tmp \
-	&& git clone -b php7 https://github.com/php-memcached-dev/php-memcached \
-	&& cd php-memcached \
-	&& phpize \
-	&& ./configure \
-	&& make \
-	&& cp /tmp/php-memcached/modules/memcached.so /usr/local/lib/php/extensions/no-debug-non-zts-20170718/memcached.so \
-	&& docker-php-ext-enable memcached
-
-# The GNU Privacy Guard -- required by Xdebug
-RUN apt-get update && apt-get install -my wget gnupg
+	ssh2-1.1.2 \
+	redis-3.1.6 \
+	apcu-5.1.9 \
+	memcached-3.0.4
 
 # Install XDebug, but not enable by default. Enable using:
 # * php -d$XDEBUG_EXT vendor/bin/phpunit
@@ -175,7 +160,7 @@ ADD php.ini /usr/local/etc/php/conf.d/docker-php.ini
 
 ## NodeJS, NPM
 # Install NodeJS
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
 	&& apt-get install -y nodejs
 
 # Install Yarn
@@ -199,11 +184,10 @@ RUN npm install -g bower
 RUN apt-get update \
 	&& apt-get install -y software-properties-common dirmngr \
 	&& apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8 \
-	&& add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirror.vpsfree.cz/mariadb/repo/10.1/debian stretch main'
+	&& add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirror.vpsfree.cz/mariadb/repo/10.2/debian stretch main'
 
 RUN apt-get update \
-	&& apt-get install -y mariadb-server \
-	&& mysql_install_db
+	&& apt-get install -y mariadb-server
 
 VOLUME /var/lib/mysql
 
