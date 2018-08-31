@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN set -xe \
 	&& docker-php-ext-configure pcntl --enable-pcntl \
 	&& docker-php-ext-install -j$(nproc) \
-		pcntl \
+		pcntl
 
 COPY bin/* /usr/local/bin/
 RUN chmod -R 700 /usr/local/bin/
