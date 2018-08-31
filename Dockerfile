@@ -1,4 +1,4 @@
-FROM php:7.2.1-fpm
+FROM php:7.2.9-cli-stretch
 
 MAINTAINER Jan Forgac <forgac@artweby.cz>
 
