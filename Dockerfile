@@ -4,13 +4,15 @@ MAINTAINER Jan Forgac <forgac@artweby.cz>
 
 ENV DEBIAN_FRONTEND noninteractive
 
+COPY bin/* /usr/local/bin/
+RUN chmod -R 700 /usr/local/bin/
+
+# PCNTL and POSIX
 RUN set -xe \
 	&& docker-php-ext-configure pcntl --enable-pcntl \
 	&& docker-php-ext-install -j$(nproc) \
-		pcntl
-
-COPY bin/* /usr/local/bin/
-RUN chmod -R 700 /usr/local/bin/
+		pcntl \
+		posix
 
 #print Debian and PHP version
 RUN cat /etc/issue
