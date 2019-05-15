@@ -117,7 +117,8 @@ RUN docker-php-ext-install \
 	calendar \
 	sysvmsg \
 	sysvsem \
-	sysvshm
+	sysvshm \
+	imap
 
 # PECL
 RUN docker-php-pecl-install \
