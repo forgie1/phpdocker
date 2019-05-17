@@ -92,10 +92,15 @@ RUN apt-get update \
 # compression
 RUN apt-get update \
 	&& apt-get install -y \
+       libzip-dev \
+       zip \
+	&& docker-php-ext-configure zip --with-libzip \
+	&& docker-php-ext-install zip
+
+RUN apt-get update \
+	&& apt-get install -y \
 	libbz2-dev \
-	zlib1g-dev \
 	&& docker-php-ext-install \
-		zip \
 		bz2
 
 # ftp
