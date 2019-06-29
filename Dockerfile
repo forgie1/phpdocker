@@ -192,7 +192,7 @@ ADD php.ini /usr/local/etc/php/conf.d/docker-php.ini
 
 ## NodeJS, NPM
 # Install NodeJS
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - \
 	&& apt-get install -y nodejs
 
 # Install Yarn
