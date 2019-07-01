@@ -237,6 +237,10 @@ RUN apt-get update \
 
 EXPOSE 6379
 
+# PHP Redis
+RUN pecl install -o -f redis \
+	&&  rm -rf /tmp/pear \
+	&&  docker-php-ext-enable redis
 
 # Clean
 RUN apt-get clean
