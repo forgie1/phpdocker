@@ -242,6 +242,10 @@ RUN pecl install -o -f redis \
 	&&  rm -rf /tmp/pear \
 	&&  docker-php-ext-enable redis
 
+# Install Libnss3 for selenium test purposes (chromedriver needs it)
+RUN apt-get update \
+    && apt-get install libnss3-dev -y
+
 # Clean
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
