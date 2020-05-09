@@ -152,7 +152,7 @@ RUN apt-get update \
 RUN cd /tmp \
 	&& git clone https://github.com/php-memcached-dev/php-memcached \
 	&& cd php-memcached \
-	&& git checkout v3.1.5
+	&& git checkout v3.1.5 \
 	&& phpize \
 	&& ./configure \
 	&& make \
