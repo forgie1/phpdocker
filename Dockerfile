@@ -65,7 +65,10 @@ RUN apt-get update \
 	libjpeg62-turbo-dev \
 	libpng-dev \
 	libgd-dev \
-	&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+	libonig-dev \
+	&& docker-php-ext-configure gd \
+       --with-jpeg=/usr/include/ \
+       --with-freetype=/usr/include/ \
 	&& docker-php-ext-install \
 		gd \
 		exif
@@ -94,7 +97,6 @@ RUN apt-get update \
 	&& apt-get install -y \
        libzip-dev \
        zip \
-	&& docker-php-ext-configure zip --with-libzip \
 	&& docker-php-ext-install zip
 
 RUN apt-get update \
@@ -148,12 +150,13 @@ RUN apt-get update \
 	libmemcached11
 
 RUN cd /tmp \
-	&& git clone -b php7 https://github.com/php-memcached-dev/php-memcached \
+	&& git clone https://github.com/php-memcached-dev/php-memcached \
 	&& cd php-memcached \
+	&& git checkout v3.1.5
 	&& phpize \
 	&& ./configure \
 	&& make \
-	&& cp /tmp/php-memcached/modules/memcached.so /usr/local/lib/php/extensions/no-debug-non-zts-20170718/memcached.so \
+	&& cp /tmp/php-memcached/modules/memcached.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/memcached.so \
 	&& docker-php-ext-enable memcached
 
 # The GNU Privacy Guard -- required by Xdebug
@@ -162,8 +165,8 @@ RUN apt-get update && apt-get install -my wget gnupg
 # Install XDebug, but not enable by default. Enable using:
 # * php -d$XDEBUG_EXT vendor/bin/phpunit
 # * php_xdebug vendor/bin/phpunit
-RUN pecl install xdebug-2.6.0
-ENV XDEBUG_EXT zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20170718/xdebug.so
+RUN pecl install xdebug-2.9.5
+ENV XDEBUG_EXT zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20190902/xdebug.so
 RUN alias php_xdebug="php -d$XDEBUG_EXT vendor/bin/phpunit"
 
 # Install composer and put binary into $PATH
@@ -192,7 +195,7 @@ ADD php.ini /usr/local/etc/php/conf.d/docker-php.ini
 
 ## NodeJS, NPM
 # Install NodeJS
-RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
 	&& apt-get install -y nodejs
 
 # Install Yarn
