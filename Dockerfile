@@ -221,11 +221,11 @@ RUN npm install -g bower
 RUN apt-get update \
 	&& apt-get install -y software-properties-common dirmngr \
 	&& apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8 \
-	&& add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirror.vpsfree.cz/mariadb/repo/10.4/debian stretch main'
+	&& add-apt-repository 'deb [arch=amd64] http://mirror.vpsfree.cz/mariadb/repo/10.4/debian buster main'
 
 RUN apt-get update \
-	&& apt-get install -y mariadb-server \
-	&& mysql_install_db
+	&& apt-get install -y mariadb-server
+#	&& mysql_install_db - already installed by line above
 
 VOLUME /var/lib/mysql
 
