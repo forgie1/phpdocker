@@ -219,7 +219,8 @@ RUN npm install -g bower
 
 # MariaDB
 RUN apt-get update \
-	&& apt-get -y install mariadb-server mariadb-client
+	&& apt-get -y install mariadb-server mariadb-client \
+	&& mysql_install_db
 
 VOLUME /var/lib/mysql
 
