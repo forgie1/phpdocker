@@ -222,6 +222,10 @@ RUN apt-get update \
 	&& apt-get -y install mariadb-server mariadb-client \
 	&& mysql_install_db
 
+RUN service mysql start \
+	&& mysql -u root -e "use mysql;update user set plugin='' where User='root';flush privileges;" \
+	&& service mysql stop
+
 VOLUME /var/lib/mysql
 
 ADD my.cnf /etc/mysql/conf.d/my.cnf
