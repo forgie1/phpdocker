@@ -223,7 +223,7 @@ RUN apt-get update \
 	&& mysql_install_db
 
 RUN service mysql start \
-	&& mysqladmin --silent --wait=5 ping || exit 1
+	&& mysqladmin --silent --wait=5 ping || exit 1 \
 	&& mysql -u root -e "use mysql;update user set plugin='' where User='root';flush privileges;" \
 	&& service mysql stop
 
