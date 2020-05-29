@@ -245,6 +245,17 @@ RUN pecl install -o -f redis \
 	&&  rm -rf /tmp/pear \
 	&&  docker-php-ext-enable redis
 
+# Ruby full?
+RUN apt-get update \
+   	&& apt-get -y install ruby-full
+
+    # Bundler: https://bundler.io
+    # Bundler provides a consistent environment for Ruby projects by tracking and installing the exact gems and versions that are needed.
+RUN gem install bundler
+    # Sass nebo Scss
+RUN gem install sass
+RUN gem install scss
+
 # Clean
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
