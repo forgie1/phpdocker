@@ -218,14 +218,25 @@ RUN npm install -g bower
 
 
 # MariaDB
-RUN apt-get update \
-	&& apt-get -y install mariadb-server mariadb-client \
-	&& mysql_install_db
+RUN cd ~
 
-RUN service mysql start \
+RUN wget https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
+
+RUN echo "6528c910e9b5a6ecd3b54b50f419504ee382e4bdc87fa333a0b0fcd46ca77338 mariadb_repo_setup" \
+	| sha256sum -c - \
+    && chmod +x mariadb_repo_setup
+
+RUN apt-get install apt-transport-https \
+	&& ./mariadb_repo_setup \
+	--mariadb-server-version="mariadb-10.5"
+
+RUN apt update \
+	&& apt install mariadb-server mariadb-backup -y
+
+RUN service mariadb start \
 	&& mysqladmin --silent --wait=5 ping || exit 1 \
-	&& mysql -u root -e "use mysql;update user set plugin='' where User='root';flush privileges;" \
-	&& service mysql stop
+	&& mysql -u root -e "use mysql;ALTER USER 'root'@'localhost' IDENTIFIED BY '';" \
+	&& service mariadb stop
 
 VOLUME /var/lib/mysql
 
