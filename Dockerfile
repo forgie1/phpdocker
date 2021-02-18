@@ -1,4 +1,4 @@
-FROM php:7.4-cli-buster
+FROM php:8.0-cli-buster
 
 MAINTAINER Jan Forgac <forgac@artweby.cz>
 
@@ -55,7 +55,9 @@ RUN apt-get update \
 	libxslt-dev \
 	&& docker-php-ext-install \
 		dom \
-		xmlrpc \
+	&& docker-php-pecl-install \
+		xmlrpc-1.0.0RC2 \
+	&& docker-php-ext-install \
 		xsl
 
 # images
