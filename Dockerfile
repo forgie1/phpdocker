@@ -158,7 +158,7 @@ RUN cd /tmp \
 	&& phpize \
 	&& ./configure \
 	&& make \
-	&& cp /tmp/php-memcached/modules/memcached.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/memcached.so \
+	&& cp /tmp/php-memcached/modules/memcached.so /usr/local/lib/php/extensions/no-debug-non-zts-20200930/memcached.so \
 	&& docker-php-ext-enable memcached
 
 # The GNU Privacy Guard -- required by Xdebug
@@ -167,8 +167,8 @@ RUN apt-get update && apt-get install -my wget gnupg
 # Install XDebug, but not enable by default. Enable using:
 # * php -d$XDEBUG_EXT vendor/bin/phpunit
 # * php_xdebug vendor/bin/phpunit
-RUN pecl install xdebug-2.9.5
-ENV XDEBUG_EXT zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20190902/xdebug.so
+RUN pecl install xdebug-3.0.2
+ENV XDEBUG_EXT zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20200930/xdebug.so
 RUN alias php_xdebug="php -d$XDEBUG_EXT vendor/bin/phpunit"
 
 # Install composer and put binary into $PATH
