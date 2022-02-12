@@ -137,7 +137,7 @@ RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 RUN docker-php-pecl-install \
 #	ssh2-1.0 \
 	redis-3.0 \
-	apcu-5.1.18
+	apcu-5.1.21
 
 # SSH2
 # TODO PECL is buggy, we must compile it.
