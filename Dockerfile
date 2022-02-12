@@ -1,4 +1,4 @@
-FROM php:8.0-cli-buster
+FROM php:8.1.1-cli-bullseye
 
 MAINTAINER Jan Forgac <forgac@artweby.cz>
 
@@ -56,7 +56,7 @@ RUN apt-get update \
 	&& docker-php-ext-install \
 		dom \
 	&& docker-php-pecl-install \
-		xmlrpc-1.0.0RC2 \
+		xmlrpc-1.0.0RC3 \
 	&& docker-php-ext-install \
 		xsl
 
@@ -145,21 +145,15 @@ RUN git clone https://github.com/php/pecl-networking-ssh2.git /usr/src/php/ext/s
 	&& docker-php-ext-install ssh2
 
 # Memcached
-# TODO PECL not available for PHP 7 yet, we must compile it.
 RUN apt-get update \
 	&& apt-get install -y \
 	libmemcached-dev \
 	libmemcached11
 
-RUN cd /tmp \
-	&& git clone https://github.com/php-memcached-dev/php-memcached \
-	&& cd php-memcached \
-	&& git checkout v3.1.5 \
-	&& phpize \
-	&& ./configure \
-	&& make \
-	&& cp /tmp/php-memcached/modules/memcached.so /usr/local/lib/php/extensions/no-debug-non-zts-20200930/memcached.so \
-	&& docker-php-ext-enable memcached
+RUN apt-get update \
+    && apt-get install -y \
+    memcached \
+    libmemcached-tools
 
 # The GNU Privacy Guard -- required by Xdebug
 RUN apt-get update && apt-get install -my wget gnupg
@@ -167,8 +161,8 @@ RUN apt-get update && apt-get install -my wget gnupg
 # Install XDebug, but not enable by default. Enable using:
 # * php -d$XDEBUG_EXT vendor/bin/phpunit
 # * php_xdebug vendor/bin/phpunit
-RUN pecl install xdebug-3.0.2
-ENV XDEBUG_EXT zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20200930/xdebug.so
+RUN docker-php-pecl-install xdebug
+ENV XDEBUG_EXT zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20210902/xdebug.so
 RUN alias php_xdebug="php -d$XDEBUG_EXT vendor/bin/phpunit"
 
 # Install composer and put binary into $PATH
@@ -220,18 +214,6 @@ RUN npm install -g bower
 
 
 # MariaDB
-RUN cd ~
-
-RUN wget https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
-
-RUN echo "6528c910e9b5a6ecd3b54b50f419504ee382e4bdc87fa333a0b0fcd46ca77338 mariadb_repo_setup" \
-	| sha256sum -c - \
-    && chmod +x mariadb_repo_setup
-
-RUN apt-get install apt-transport-https \
-	&& ./mariadb_repo_setup \
-	--mariadb-server-version="mariadb-10.5"
-
 RUN apt update \
 	&& apt install mariadb-server mariadb-backup -y
 
