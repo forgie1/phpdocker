@@ -1,4 +1,4 @@
-FROM php:8.1.1-cli-bullseye
+FROM php:8.2.1-cli-bullseye
 
 MAINTAINER Jan Forgac <forgac@artweby.cz>
 
@@ -162,7 +162,7 @@ RUN apt-get update && apt-get install -my wget gnupg
 # * php -d$XDEBUG_EXT vendor/bin/phpunit
 # * php_xdebug vendor/bin/phpunit
 RUN docker-php-pecl-install xdebug
-ENV XDEBUG_EXT zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20210902/xdebug.so
+ENV XDEBUG_EXT zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20220829/xdebug.so
 RUN alias php_xdebug="php -d$XDEBUG_EXT vendor/bin/phpunit"
 
 # Install composer and put binary into $PATH
