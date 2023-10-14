@@ -1,4 +1,4 @@
-FROM php:8.2.1-cli-bullseye
+FROM php:8.2.11-cli-bullseye
 
 MAINTAINER Jan Forgac <forgac@artweby.cz>
 
@@ -189,17 +189,20 @@ RUN curl -OL https://phar.phpunit.de/phpunit.phar \
 ADD php.ini /usr/local/etc/php/conf.d/docker-php.ini
 
 
-## NodeJS, NPM
-# Install NodeJS
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
-	&& apt-get install -y nodejs
-
-# Install Yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-	&& echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-
+## NodeJS, NPM, Yarn
+# Install NodeJS as is here: https://github.com/nodesource/distributions#installation-instructions
 RUN apt-get update \
-	&& apt-get install -y yarn
+	&& apt-get install -y ca-certificates curl gnupg \
+    && mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+
+RUN NODE_MAJOR=20 \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+
+RUN apt-get update && apt-get install nodejs -y
+
+# Install Yarn globally
+RUN npm install --global yarn
 
 RUN yarn --version
 
@@ -208,10 +211,6 @@ RUN npm install -g grunt-cli
 
 # Install Gulp globally
 RUN npm install -g gulp-cli
-
-# Install Bower globally
-RUN npm install -g bower
-
 
 # MariaDB
 RUN apt update \
