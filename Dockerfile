@@ -1,4 +1,4 @@
-FROM php:8.2.11-cli-bullseye
+FROM php:8.2.11-cli-bookworm
 
 MAINTAINER Jan Forgac <forgac@artweby.cz>
 
