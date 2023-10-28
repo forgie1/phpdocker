@@ -212,6 +212,9 @@ RUN npm install -g grunt-cli
 # Install Gulp globally
 RUN npm install -g gulp-cli
 
+# Install Bower globally
+RUN npm install -g bower
+
 # MariaDB
 RUN apt update \
 	&& apt install mariadb-server mariadb-backup -y
