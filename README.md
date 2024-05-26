@@ -57,8 +57,11 @@ Usage: `URL="https://www.example.com" STATUS=403 check-status-code`
 * PHP is started automatically.
 * You can type PHP commands, eg. `php -r "echo 1;"`.
 * Each Docker image contains ONLY ONE VERSION OF PHP, so:
-	* If you need PHP 5.6, use `phpdocker/phpdocker:5.6`.
-	* If you need PHP 7.0, use `phpdocker/phpdocker:7.0`.
+	* If you need PHP 5.6, use `artfocus/phpdocker:5.6`.
+	* If you need PHP 7.0, use `artfocus/phpdocker:7.0`.
+	* If you need PHP 8.0, use `artfocus/phpdocker:8.0`.
+	* If you need PHP 8.2, use `artfocus/phpdocker:8.2bw`.
+	* If you need PHP 8.3, use `artfocus/phpdocker:8.3`.
 
 ### MariaDB
 
