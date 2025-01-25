@@ -129,11 +129,10 @@ RUN docker-php-ext-install \
 	sysvshm
 
 # IMAP
-#RUN apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/*
-#RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
-#    && docker-php-ext-install imap
+RUN apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/* \
+    && docker-php-pecl-install imap
 
-# PECL
+# REDIS
 RUN docker-php-pecl-install \
 #	ssh2-1.0 \
 	redis-6.1.0
