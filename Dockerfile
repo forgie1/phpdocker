@@ -1,4 +1,4 @@
-FROM php:8.3.7-cli-bookworm
+FROM php:8.4.3-cli-bookworm
 
 MAINTAINER Jan Forgac <forgac@artweby.cz>
 
@@ -129,15 +129,14 @@ RUN docker-php-ext-install \
 	sysvshm
 
 # IMAP
-RUN apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/*
-RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
-    && docker-php-ext-install imap
+#RUN apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/*
+#RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+#    && docker-php-ext-install imap
 
 # PECL
 RUN docker-php-pecl-install \
 #	ssh2-1.0 \
-	redis-3.0 \
-	apcu-5.1.21
+	redis-6.1.0
 
 # SSH2
 # TODO PECL is buggy, we must compile it.
@@ -235,9 +234,9 @@ RUN apt-get update \
 EXPOSE 6379
 
 # PHP Redis
-RUN pecl install -o -f redis \
-	&&  rm -rf /tmp/pear \
-	&&  docker-php-ext-enable redis
+#RUN pecl install -o -f redis \
+#	&&  rm -rf /tmp/pear \
+#	&&  docker-php-ext-enable redis
 
 # Clean
 RUN apt-get clean
