@@ -1,4 +1,4 @@
-FROM php:8.4.3-cli-bookworm
+FROM php:8.4.20-cli-bookworm
 
 MAINTAINER Jan Forgac <forgac@artweby.cz>
 
