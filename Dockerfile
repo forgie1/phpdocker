@@ -163,7 +163,6 @@ RUN apt-get update && apt-get install -my wget gnupg
 
 # Install XDebug
 RUN docker-php-pecl-install xdebug
-RUN alias php_xdebug="php -dzend_extension=xdebug.so vendor/bin/phpunit"
 
 # Install composer and put binary into $PATH
 RUN curl -sS https://getcomposer.org/installer | php \
