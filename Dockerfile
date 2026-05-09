@@ -1,4 +1,4 @@
-FROM php:8.4.20-cli-bookworm
+FROM php:8.5.6-cli-trixie
 
 MAINTAINER Jan Forgac <forgac@artweby.cz>
 
@@ -49,12 +49,11 @@ RUN apt-get update \
 	&& docker-php-ext-install intl
 
 # xml
+# Note: DOM extension is already built into PHP 8.0+ by default.
 RUN apt-get update \
 	&& apt-get install -y \
 	libxml2-dev \
 	libxslt-dev \
-	&& docker-php-ext-install \
-		dom \
 	&& docker-php-pecl-install \
 		xmlrpc-1.0.0RC3 \
 	&& docker-php-ext-install \
@@ -63,14 +62,12 @@ RUN apt-get update \
 # images
 RUN apt-get update \
 	&& apt-get install -y \
-	libfreetype6-dev \
-	libjpeg62-turbo-dev \
-	libpng-dev \
-	libgd-dev \
-	libonig-dev \
+		libfreetype6-dev \
+		libjpeg62-turbo-dev \
+		libpng-dev \
 	&& docker-php-ext-configure gd \
-       --with-jpeg=/usr/include/ \
-       --with-freetype=/usr/include/ \
+		--with-freetype \
+		--with-jpeg \
 	&& docker-php-ext-install \
 		gd \
 		exif
@@ -82,9 +79,12 @@ RUN docker-php-ext-install \
 	pdo_mysql
 
 # strings
-RUN docker-php-ext-install \
-	gettext \
-	mbstring
+RUN apt-get update \
+	&& apt-get install -y \
+		libonig-dev \
+	&& docker-php-ext-install \
+		gettext \
+		mbstring
 
 # math
 RUN apt-get update \
@@ -129,24 +129,29 @@ RUN docker-php-ext-install \
 	sysvshm
 
 # IMAP
-RUN apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/* \
-    && docker-php-pecl-install imap
+RUN echo "deb http://deb.debian.org/debian bookworm main" > /etc/apt/sources.list.d/bookworm.list \
+    && apt-get update \
+    && apt-get install -y libc-client-dev libkrb5-dev \
+    && rm /etc/apt/sources.list.d/bookworm.list \
+    && apt-get update \
+    && docker-php-pecl-install imap \
+    && rm -rf /var/lib/apt/lists/*
 
 # REDIS
 RUN docker-php-pecl-install \
 #	ssh2-1.0 \
-	redis-6.1.0
+	redis
 
 # SSH2
 # TODO PECL is buggy, we must compile it.
 RUN git clone https://github.com/php/pecl-networking-ssh2.git /usr/src/php/ext/ssh2 \
-	&& docker-php-ext-install ssh2
+	&& docker-php-ext-install ssh2 \
+	&& rm -rf /usr/src/php/ext/ssh2
 
 # Memcached
 RUN apt-get update \
 	&& apt-get install -y \
-	libmemcached-dev \
-	libmemcached11
+	libmemcached-dev
 
 RUN apt-get update \
     && apt-get install -y \
@@ -156,12 +161,9 @@ RUN apt-get update \
 # The GNU Privacy Guard -- required by Xdebug
 RUN apt-get update && apt-get install -my wget gnupg
 
-# Install XDebug, but not enable by default. Enable using:
-# * php -d$XDEBUG_EXT vendor/bin/phpunit
-# * php_xdebug vendor/bin/phpunit
+# Install XDebug
 RUN docker-php-pecl-install xdebug
-ENV XDEBUG_EXT zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20220829/xdebug.so
-RUN alias php_xdebug="php -d$XDEBUG_EXT vendor/bin/phpunit"
+RUN alias php_xdebug="php -dzend_extension=xdebug.so vendor/bin/phpunit"
 
 # Install composer and put binary into $PATH
 RUN curl -sS https://getcomposer.org/installer | php \
